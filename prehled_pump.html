@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Přehled | Tank ONO</title>
+    <link rel="icon" type="image/png" href="web_icon.PNG">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glass-bg: rgba(14, 20, 32, 0.65);
+            --glass-card: rgba(18, 25, 38, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-hover: rgba(255, 255, 255, 0.12);
+            --brand-yellow: #ffcc00;
+            --brand-red: #e11d48;
+            --brand-blue: #3b82f6;
+            --brand-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #070a12;
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Fotografie bg_ono jako pozadí v plné kvalitě */
+        .bg-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: linear-gradient(180deg, rgba(7, 10, 18, 0.45) 0%, rgba(7, 10, 18, 0.8) 100%),
+                        url('bg_ono.png') center/cover no-repeat;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        /* Jemná dynamická mlha */
+        .fog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.5;
+            animation: moveFog 45s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes moveFog {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-20%, -5%); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigace */
+        nav {
+            position: sticky;
+            top: 15px;
+            z-index: 100;
+            margin-top: 15px;
+            margin-bottom: 40px;
+        }
+
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .brand-logo {
+            background: var(--brand-yellow);
+            color: #000;
+            font-weight: 900;
+            font-size: 1.4rem;
+            padding: 4px 12px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Sekce */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 10px 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 204, 0, 0.12);
+            border: 1px solid rgba(255, 204, 0, 0.35);
+            color: var(--brand-yellow);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* Vyhledávač & Průvodce (Dotazník) */
+        .search-box {
+            max-width: 550px;
+            margin: 0 auto 35px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 20px 16px 50px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--brand-yellow);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Krokovač / Dotazník Box */
+        .wizard-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .wizard-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .step-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .step-badge.active {
+            background: var(--brand-yellow);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+            border-color: var(--brand-yellow);
+        }
+
+        .step-divider {
+            height: 2px;
+            width: 40px;
+            background: var(--glass-border);
+        }
+
+        .step-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        /* Mřížka Kraje */
+        .kraj-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .btn-kraj {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 18px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .btn-kraj:hover {
+            background: rgba(255, 204, 0, 0.15);
+            border-color: var(--brand-yellow);
+            transform: translateY(-2px);
+            color: var(--brand-yellow);
+        }
+
+        .btn-kraj span.count {
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Mřížka Stanice */
+        .pump-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .btn-pump {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 18px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-pump:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-pump i {
+            color: var(--brand-yellow);
+        }
+
+        /* Detail stanice */
+        .pump-detail-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+
+        .detail-title h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--brand-yellow);
+        }
+
+        .detail-title p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .detail-section h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-section h4 i {
+            color: var(--brand-yellow);
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Patička */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            background: rgba(5, 8, 15, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 40px 0 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 8px; }
+        .footer-col a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-col a:hover { color: #fff; }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+            .wizard-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-fixed"></div>
+    <div class="fog-overlay"></div>
+
+    <div class="container">
+        <nav>
+            <div class="nav-glass">
+                <a href="index.html" class="brand">
+                    <div class="brand-logo">ONO</div>
+                    <div class="brand-title">Tank ONO</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#ceny">Ceník paliv</a></li>
+                    <li><a href="index.html#sluzby">Služby</a></li>
+                    <li><a href="prehled_pump.html" class="active">Síť stanic</a></li>
+                    <li><a href="o_firme.html">O společnosti</a></li>
+                </ul>
+                <a href="prehled_pump.html" class="nav-btn">
+                    <i class="fa-solid fa-location-dot"></i> Najít stanici
+                </a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-badge">
+                <i class="fa-solid fa-map-pin"></i> 45 čerpacích stanic Tank ONO v ČR
+            </div>
+            <h1>Přehled čerpacích stanic</h1>
+            <p>Zvolte kraj nebo zadejte název stanice do vyhledávače.</p>
+        </section>
+
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Hledat stanici (Spytihněv, Brno, Plzeň, Jihlava...)..." oninput="handleSearch()">
+        </div>
+
+        <div class="wizard-card">
+            
+            <div class="wizard-steps">
+                <div class="step-badge active" id="step1-badge">1</div>
+                <div class="step-divider"></div>
+                <div class="step-badge" id="step2-badge">2</div>
+                <div class="step-divider"></div>
+                <div class="step-badge" id="step3-badge">3</div>
+            </div>
+
+            <div id="step-kraj">
+                <div class="step-title">Krok 1: Vyberte kraj</div>
+                <div class="kraj-grid" id="krajList"></div>
+            </div>
+
+            <div id="step-pump" style="display: none;">
+                <button class="back-btn" onclick="goToStep1()"><i class="fa-solid fa-arrow-left"></i> Zpět na kraje</button>
+                <div class="step-title" id="pumpStepTitle">Krok 2: Vyberte čerpací stanici</div>
+                <div class="pump-grid" id="pumpList"></div>
+            </div>
+
+            <div id="step-detail" style="display: none;">
+                <button class="back-btn" onclick="goToStep2()"><i class="fa-solid fa-arrow-left"></i> Zpět na seznam stanic</button>
+                <div id="pumpDetailContent"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="brand-logo" style="display:inline-block; margin-bottom: 12px;">ONO</div>
+                    <p>Tank ONO s.r.o.<br>Poctivá česká síť čerpacích stanic od roku 1993.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Rychlé odkazy</h4>
+                    <ul>
+                        <li><a href="index.html#ceny">Aktuální ceník</a></li>
+                        <li><a href="prehled_pump.html">Seznam stanic</a></li>
+                        <li><a href="index.html#sluzby">Služby</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Pro řidiče</h4>
+                    <ul>
+                        <li><a href="#">Kvalita paliv & Certifikace</a></li>
+                        <li><a href="#">Palivové karty</a></li>
+                        <li><a href="#">Bezpečnostní listy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>Infolinka: +420 377 421 111<br>Email: info@tank-ono.cz</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Tank ONO s.r.o. Všechna práva vyhrazena. | Designed & Developed by Aurea</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const stationsData = {
+            "Zlínský kraj": [
+                { id: "spytihnev", name: "Spytihněv", address: "Spytihněv 488, 763 64 Spytihněv", phone: "+420 577 941 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany6", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení", "Kompresor/Vysavač", "Platba EUR"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "zadverice", name: "Zádveřice u Zlína", address: "Zádveřice 420, 763 12 Zádveřice-Raková", phone: "+420 577 981 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Zadverice", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "brest", name: "Břest u Kroměříže", address: "Břest 270, 768 23 Břest", phone: "+420 573 330 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Brest", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Plzeňský kraj": [
+                { id: "plzen-domazlicka", name: "Plzeň – Domažlická", address: "Domažlická 160, 318 00 Plzeň", phone: "+420 377 386 051", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Plzen+Domazlicka", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "AdBlue", "Myčka aut", "Občerstvení", "Kompresor/Vysavač", "Platba EUR"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "plzen-studentska", name: "Plzeň – Studentská", address: "Studentská 57, 323 00 Plzeň", phone: "+420 377 532 100", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Plzen+Studentska", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "nyrany", name: "Nýřany", address: "Pňovanská 1150, 330 23 Nýřany", phone: "+420 377 931 820", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany", services: ["Natural 95", "Diesel", "LPG", "Myčka kamionů", "Myčka aut", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "chlumcany", name: "Chlumčany u Přeštic", address: "Komenského 459, 334 42 Chlumčany", phone: "+420 377 983 111", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "havlovice", name: "Havlovice u Domažlic", address: "Havlovice 95, 344 01 Domažlice", phone: "+420 379 722 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Havlovice", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Praha": [
+                { id: "praha-mecholupy", name: "Praha – Dolní Měcholupy", address: "Kutnohorská 225/76, 109 00 Praha 10", phone: "+420 272 701 020", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Praha+Dolni+Mecholupy", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "LPG", "AdBlue", "Myčka aut", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "praha-sterboholy", name: "Praha – Štěrboholy", address: "Černokostelecká 327, 102 00 Praha 10", phone: "+420 272 706 111", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Praha+Sterboholy", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Středočeský kraj": [
+                { id: "krupa", name: "Krupá u Rakovníka", address: "Krupá 203, 270 09 Krupá", phone: "+420 313 582 301", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Krupa", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "melnik", name: "Mělník", address: "Kokořínská 3450, 276 01 Mělník", phone: "+420 315 627 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Melnik", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "sukorady", name: "Sukorady u Mladé Boleslavi", address: "Sukorady 110, 294 06 Sukorady", phone: "+420 326 397 100", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Sukorady", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "kojetice", name: "Kojetice – Tůmovka", address: "Kojetice 152, 250 72 Kojetice", phone: "+420 315 684 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Kojetice", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "kolaje", name: "Kolaje u Poděbrad", address: "Kolaje 42, 289 04 Opolany", phone: "+420 325 635 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany7", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "circvice", name: "Církvice u Kutné Hory", address: "Církvice 220, 285 33 Církvice", phone: "+420 327 571 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany8", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Jihočeský kraj": [
+                { id: "dolni-dvoriste-1", name: "Dolní Dvořiště – ONO I", address: "Dolní Dvořiště 218, 382 72", phone: "+420 380 324 100", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Dolni+Dvoriste+I", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "LPG", "AdBlue", "Směnárna", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "dolni-dvoriste-2", name: "Dolní Dvořiště – ONO II", address: "Dolní Dvořiště 220, 382 72", phone: "+420 380 324 200", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Dolni+Dvoriste+II", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "jindrichuv-hradec", name: "Jindřichův Hradec", address: "Jarošovská 1251, 377 01 Jindřichův Hradec", phone: "+420 384 321 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Jindrichuv+Hradec", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "plana", name: "Planá nad Lužnicí", address: "ČSLA 733, 391 11 Planá nad Lužnicí", phone: "+420 381 291 020", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Plana+nad+Luznici", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "kbelnice", name: "Kbelnice u Strakonic", address: "Kbelnice 55, 386 01 Přešťovice", phone: "+420 383 328 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany9", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "podoli", name: "Podolí u Písku", address: "Podolí I 90, 398 43 Podolí I", phone: "+420 382 271 002", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany0", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "strazny", name: "Řasnice – Strážný", address: "Řasnice 35, 384 43 Strážný", phone: "+420 388 337 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany1", services: ["Natural 95", "Diesel", "Směnárna"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Jihomoravský kraj": [
+                { id: "brno-hviezdoslavova", name: "Brno – Hviezdoslavova", address: "Hviezdoslavova 1b, 627 00 Brno-Slatina", phone: "+420 548 210 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Brno+Hviezdoslavova", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "AdBlue", "Občerstvení", "Platba EUR"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "brno-popovice", name: "Popovice u Brna", address: "Popovice 89, 664 49 Popovice", phone: "+420 547 232 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Popovice", services: ["Natural 95", "Diesel", "LPG", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Ústecký kraj": [
+                { id: "chlumec", name: "Chlumec u Ústí nad Labem", address: "Ústecká 228, 403 17 Chlumec", phone: "+420 475 227 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumec", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "teplice", name: "Teplice", address: "Riegrova 3214, 415 01 Teplice", phone: "+420 417 531 002", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Teplice", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "brezno", name: "Březno u Loun (D7)", address: "Březno 120, 440 01 Březno", phone: "+420 415 670 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Brezno", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "rumburk", name: "Rumburk", address: "Horní Jindřichov 141, 408 01 Rumburk", phone: "+420 412 331 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Rumburk", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "havran", name: "Havraň u Mostu", address: "Havraň 112, 434 01 Most", phone: "+420 476 701 002", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany2", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "chomutov", name: "Chomutov – Přečaply", address: "Přečaply 65, 431 11 Údlice", phone: "+420 474 651 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany3", services: ["Natural 95", "Diesel", "AdBlue"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "dobkovice", name: "Dobkovice u Děčína", address: "Dobkovice 130, 407 03 Dobkovice", phone: "+420 412 541 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany4", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Karlovarský kraj": [
+                { id: "sokolov", name: "Sokolov", address: "Jednoty 1920, 356 01 Sokolov", phone: "+420 352 621 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany5", services: ["Natural 95", "Diesel", "Diesel+", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "cheb", name: "Cheb", address: "Tršnická 14, 350 02 Cheb", phone: "+420 354 431 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany6", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Směnárna"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "voformatov", name: "Vojtanov", address: "Vojtanov 115, 351 34 Vojtanov", phone: "+420 354 541 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany7", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "ostrov", name: "Ostrov nad Ohří", address: "Jáchymovská 1400, 363 01 Ostrov", phone: "+420 353 841 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany8", services: ["Natural 95", "Diesel", "AdBlue"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Královéhradecký kraj": [
+                { id: "milovice", name: "Milovice u Hořic", address: "Milovice u Hořic 115, 508 01", phone: "+420 493 691 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Chlumcany9", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "trutnov", name: "Trutnov", address: "Horská 890, 541 01 Trutnov", phone: "+420 499 811 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Havlovice0", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "vysokov", name: "Vysokov u Náchoda", address: "Vysokov 205, 549 12 Vysokov", phone: "+420 491 421 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Havlovice1", services: ["Natural 95", "Diesel", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Pardubický kraj": [
+                { id: "vysoke-myto", name: "Vysoké Mýto", address: "Hradecká 850, 566 01 Vysoké Mýto", phone: "+420 465 421 002", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Havlovice2", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Liberecký kraj": [
+                { id: "cvikov", name: "Cvikov", address: "Zákupká 550, 471 54 Cvikov", phone: "+420 487 751 010", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Havlovice3", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Kraj Vysočina": [
+                { id: "jihlava", name: "Jihlava", address: "Žižkova 110, 586 01 Jihlava", phone: "+420 567 301 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Jihlava", services: ["Natural 95", "Natural 98", "Diesel", "Diesel+", "LPG", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ],
+            "Moravskoslezský kraj": [
+                { id: "studenka", name: "Studénka (D1 exit 336)", address: "Butovická 904, 742 13 Studénka", phone: "+420 556 410 020", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Studenka", services: ["Natural 95", "Diesel", "Diesel+", "LPG", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
+                { id: "mosnov", name: "Mošnov", address: "Mošnov 305, 742 51 Mošnov", phone: "+420 556 411 001", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Mosnov", services: ["Natural 95", "Diesel", "AdBlue", "Občerstvení"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] }
+            ]
+        };
+
+        let currentKraj = null;
+
+        function renderKraje() {
+            const container = document.getElementById('krajList');
+            container.innerHTML = '';
+
+            Object.keys(stationsData).forEach(kraj => {
+                const count = stationsData[kraj].length;
+                const btn = document.createElement('button');
+                btn.className = 'btn-kraj';
+                btn.onclick = () => selectKraj(kraj);
+                btn.innerHTML = `
+                    <span>${kraj}</span>
+                    <span class="count">${count} ${count === 1 ? 'stanice' : (count < 5 ? 'stanice' : 'stanic')}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectKraj(kraj) {
+            currentKraj = kraj;
+            document.getElementById('step1-badge').classList.remove('active');
+            document.getElementById('step2-badge').classList.add('active');
+
+            document.getElementById('step-kraj').style.display = 'none';
+            document.getElementById('step-pump').style.display = 'block';
+
+            document.getElementById('pumpStepTitle').innerText = `Krok 2: Stanice v kraji "${kraj}"`;
+
+            const container = document.getElementById('pumpList');
+            container.innerHTML = '';
+
+            stationsData[kraj].forEach(pump => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-pump';
+                btn.onclick = () => selectPump(pump);
+                btn.innerHTML = `
+                    <i class="fa-solid fa-gas-pump"></i>
+                    <div>
+                        <div>${pump.name}</div>
+                        <div style="font-size:0.8rem; color: var(--text-muted); font-weight:normal;">${pump.address}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectPump(pump) {
+            document.getElementById('step2-badge').classList.remove('active');
+            document.getElementById('step3-badge').classList.add('active');
+
+            document.getElementById('step-pump').style.display = 'none';
+            document.getElementById('step-detail').style.display = 'block';
+
+            const container = document.getElementById('pumpDetailContent');
+            container.innerHTML = `
+                <div class="pump-detail-card">
+                    <div class="detail-header">
+                        <div class="detail-title">
+                            <h2>${pump.name}</h2>
+                            <p><i class="fa-solid fa-location-dot" style="color:var(--brand-yellow)"></i> ${pump.address}</p>
+                        </div>
+                        <a href="${pump.mapUrl}" target="_blank" class="nav-btn" style="background:var(--brand-yellow); color:#000; border:none;">
+                            <i class="fa-solid fa-diamond-turn-right"></i> Navigovat (Google Mapy)
+                        </a>
+                    </div>
+
+                    <div class="detail-grid">
+                        <div class="detail-section">
+                            <h4><i class="fa-regular fa-clock"></i> Otevírací doba</h4>
+                            <p style="color:#fff; font-weight:700;">${pump.open}</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4><i class="fa-solid fa-phone"></i> Telefon na stanici</h4>
+                            <p style="color:var(--text-muted);">${pump.phone}</p>
+                        </div>
+                        <div class="detail-section">
+                            <h4><i class="fa-solid fa-credit-card"></i> Akceptované karty</h4>
+                            <div class="service-tags">
+                                ${pump.cards.map(c => `<span class="tag"><i class="fa-solid fa-check" style="color:var(--brand-green)"></i> ${c}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h4><i class="fa-solid fa-list-check"></i> Nabízená paliva a služby</h4>
+                        <div class="service-tags">
+                            ${pump.services.map(s => `<span class="tag"><i class="fa-solid fa-gas-pump" style="color:var(--brand-yellow)"></i> ${s}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function goToStep1() {
+            document.getElementById('step2-badge').classList.remove('active');
+            document.getElementById('step3-badge').classList.remove('active');
+            document.getElementById('step1-badge').classList.add('active');
+
+            document.getElementById('step-pump').style.display = 'none';
+            document.getElementById('step-detail').style.display = 'none';
+            document.getElementById('step-kraj').style.display = 'block';
+        }
+
+        function goToStep2() {
+            document.getElementById('step3-badge').classList.remove('active');
+            document.getElementById('step2-badge').classList.add('active');
+
+            document.getElementById('step-detail').style.display = 'none';
+            document.getElementById('step-pump').style.display = 'block';
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            if (query === '') {
+                goToStep1();
+                return;
+            }
+
+            let foundPumps = [];
+            Object.keys(stationsData).forEach(kraj => {
+                stationsData[kraj].forEach(pump => {
+                    if (pump.name.toLowerCase().includes(query) || pump.address.toLowerCase().includes(query) || kraj.toLowerCase().includes(query)) {
+                        foundPumps.push(pump);
+                    }
+                });
+            });
+
+            document.getElementById('step1-badge').classList.remove('active');
+            document.getElementById('step3-badge').classList.remove('active');
+            document.getElementById('step2-badge').classList.add('active');
+
+            document.getElementById('step-kraj').style.display = 'none';
+            document.getElementById('step-detail').style.display = 'none';
+            document.getElementById('step-pump').style.display = 'block';
+
+            document.getElementById('pumpStepTitle').innerText = `Výsledky vyhledávání pro "${query}" (${foundPumps.length})`;
+
+            const container = document.getElementById('pumpList');
+            container.innerHTML = '';
+
+            if (foundPumps.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); text-align:center; grid-column: 1/-1;">Žádná stanice odpovídající hledání nebyla nalezena.</p>';
+                return;
+            }
+
+            foundPumps.forEach(pump => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-pump';
+                btn.onclick = () => selectPump(pump);
+                btn.innerHTML = `
+                    <i class="fa-solid fa-gas-pump"></i>
+                    <div>
+                        <div>${pump.name}</div>
+                        <div style="font-size:0.8rem; color: var(--text-muted); font-weight:normal;">${pump.address}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', renderKraje);
+    </script>
+</body>
+</html>

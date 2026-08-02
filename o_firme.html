@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O společnosti | Tank ONO</title>
+    <link rel="icon" type="image/png" href="web_icon.PNG">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glass-bg: rgba(14, 20, 32, 0.65);
+            --glass-card: rgba(18, 25, 38, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-hover: rgba(255, 255, 255, 0.12);
+            --brand-yellow: #ffcc00;
+            --brand-red: #e11d48;
+            --brand-blue: #3b82f6;
+            --brand-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #070a12;
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Fotografie bg_ono jako pozadí v plné kvalitě */
+        .bg-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: linear-gradient(180deg, rgba(7, 10, 18, 0.45) 0%, rgba(7, 10, 18, 0.8) 100%),
+                        url('bg_ono.png') center/cover no-repeat;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        /* Jemná dynamická mlha */
+        .fog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.5;
+            animation: moveFog 45s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes moveFog {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-20%, -5%); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigace */
+        nav {
+            position: sticky;
+            top: 15px;
+            z-index: 100;
+            margin-top: 15px;
+            margin-bottom: 40px;
+        }
+
+        .nav-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 12px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .brand-logo {
+            background: var(--brand-yellow);
+            color: #000;
+            font-weight: 900;
+            font-size: 1.4rem;
+            padding: 4px 12px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Sekce */
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 20px 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 204, 0, 0.12);
+            border: 1px solid rgba(255, 204, 0, 0.35);
+            color: var(--brand-yellow);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 650px;
+            margin: 0 auto;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* Glass Karta Obecná */
+        .glass-panel {
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .section-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+        }
+
+        .section-heading i {
+            color: var(--brand-yellow);
+        }
+
+        /* Základní údaje a Kontakty Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px;
+            transition: background 0.2s;
+        }
+
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .info-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--brand-yellow);
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-list li i {
+            color: #fff;
+            margin-top: 4px;
+            width: 16px;
+        }
+
+        .info-list strong {
+            color: #fff;
+        }
+
+        /* Kontakty Lidé */
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .person-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .person-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .person-role {
+            font-size: 0.85rem;
+            color: var(--brand-yellow);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .person-contact {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .person-contact:hover {
+            color: #fff;
+        }
+
+        /* Historie / Časová osa */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+            margin-top: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 2px;
+            height: calc(100% - 10px);
+            background: var(--glass-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 18px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 7px;
+            left: -20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--brand-yellow);
+            box-shadow: 0 0 10px var(--brand-yellow);
+        }
+
+        .timeline-year {
+            font-weight: 800;
+            color: var(--brand-yellow);
+            font-size: 1.05rem;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: inline;
+        }
+
+        /* Patička */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            background: rgba(5, 8, 15, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 40px 0 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+            .glass-panel { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-fixed"></div>
+    <div class="fog-overlay"></div>
+
+    <div class="container">
+        <nav>
+            <div class="nav-glass">
+                <a href="index.html" class="brand">
+                    <div class="brand-logo">ONO</div>
+                    <div class="brand-title">Tank ONO</div>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#ceny">Ceník paliv</a></li>
+                    <li><a href="index.html#sluzby">Služby</a></li>
+                    <li><a href="prehled_pump.html">Síť stanic</a></li>
+                    <li><a href="o_firme.html" class="active">O společnosti</a></li>
+                </ul>
+                <a href="prehled_pump.html" class="nav-btn">
+                    <i class="fa-solid fa-location-dot"></i> Najít stanici
+                </a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-badge">
+                <i class="fa-solid fa-building"></i> Česká rodinná společnost od roku 1993
+            </div>
+            <h1>O společnosti Tank ONO</h1>
+            <p>Trvale garantujeme nejnižší ceny pohonných hmot na českém trhu při zachování nekompromisní kvality paliv.</p>
+        </section>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3><i class="fa-solid fa-file-contract"></i> Základní údaje</h3>
+                <ul class="info-list">
+                    <li><i class="fa-solid fa-signature"></i> <div><strong>Název:</strong> Tank ONO s.r.o.</div></li>
+                    <li><i class="fa-solid fa-location-dot"></i> <div><strong>Sídlo:</strong> Domažlická 160, 318 00 Plzeň</div></li>
+                    <li><i class="fa-solid fa-id-card"></i> <div><strong>IČO:</strong> 48365289</div></li>
+                    <li><i class="fa-solid fa-receipt"></i> <div><strong>DIČ:</strong> CZ48365289</div></li>
+                    <li><i class="fa-solid fa-gavel"></i> <div><strong>Zápis:</strong> Krajský soud v Plzni, oddíl C, vložka 3926</div></li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h3><i class="fa-solid fa-headset"></i> Centrála & Dokladová agenda</h3>
+                <ul class="info-list">
+                    <li><i class="fa-solid fa-fax"></i> <div><strong>Fax centrála:</strong> +420 377 386 051</div></li>
+                    <li><i class="fa-solid fa-receipt"></i> <div><strong>Kopie dokladů:</strong> zašlete výpis z účtu na e-mail níže a obdržíte kopii dokladu.</div></li>
+                    <li><i class="fa-solid fa-envelope"></i> <div><strong>E-mail pro doklady:</strong> <a href="mailto:doklady@tank-ono.cz" style="color:var(--brand-yellow)">doklady@tank-ono.cz</a></div></li>
+                    <li><i class="fa-solid fa-credit-card"></i> <div><strong>Lokální karty ONO:</strong> Alice Haslerová, Lenka Zdražilová<br><span style="color:#fff"><i class="fa-solid fa-phone"></i> 724 510 008</span></div></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <div class="section-heading">
+                <i class="fa-solid fa-users"></i> Vedení společnosti a kontakty
+            </div>
+            
+            <div class="contacts-grid">
+                <div class="person-card">
+                    <div class="person-name">Ing. Jiří Ondra</div>
+                    <div class="person-role">Ekonomický úsek, personální agenda, investice</div>
+                    <a href="tel:+420602681219" class="person-contact"><i class="fa-solid fa-phone"></i> +420 602 681 219</a>
+                    <a href="mailto:tankono@mybox.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> tankono@mybox.cz</a>
+                </div>
+
+                <div class="person-card">
+                    <div class="person-name">Ing. Petr Ondra</div>
+                    <div class="person-role">Distribuce, ceny PHM, technický úsek</div>
+                    <a href="tel:+420602161925" class="person-contact"><i class="fa-solid fa-phone"></i> +420 602 161 925</a>
+                </div>
+
+                <div class="person-card">
+                    <div class="person-name">Jiří Ondra jr.</div>
+                    <div class="person-role">Provozní vedoucí (ekonomický úsek)</div>
+                    <a href="tel:+420723117777" class="person-contact"><i class="fa-solid fa-phone"></i> +420 723 117 777</a>
+                    <a href="mailto:ondrajr@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> ondrajr@tank-ono.cz</a>
+                </div>
+
+                <div class="person-card">
+                    <div class="person-name">Jan Šimek</div>
+                    <div class="person-role">Provozní vedoucí (ekonomický úsek)</div>
+                    <a href="tel:+420702250754" class="person-contact"><i class="fa-solid fa-phone"></i> +420 702 250 754</a>
+                    <a href="mailto:simek@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> simek@tank-ono.cz</a>
+                </div>
+
+                <div class="person-card">
+                    <div class="person-name">Petr Ondra jr.</div>
+                    <div class="person-role">Provozní vedoucí (technický úsek)</div>
+                    <a href="tel:+420723827283" class="person-contact"><i class="fa-solid fa-phone"></i> +420 723 827 283</a>
+                    <a href="mailto:ondrapetrjr@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> ondrapetrjr@tank-ono.cz</a>
+                </div>
+
+                <div class="person-card">
+                    <div class="person-name">Radek Kalvoda</div>
+                    <div class="person-role">Provozní vedoucí (technický úsek)</div>
+                    <a href="tel:+420606681823" class="person-contact"><i class="fa-solid fa-phone"></i> +420 606 681 823</a>
+                    <a href="mailto:kalvoda@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> kalvoda@tank-ono.cz</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                <h4 style="color:#fff; margin-bottom: 15px;"><i class="fa-solid fa-calculator" style="color:var(--brand-yellow)"></i> Účetní úsek & Personální agenda</h4>
+                <div class="contacts-grid">
+                    <div class="person-card">
+                        <div class="person-name">Jana Bíbová</div>
+                        <div class="person-role">Účetní & Personální agenda</div>
+                        <a href="tel:+420377384065" class="person-contact"><i class="fa-solid fa-phone"></i> +420 377 384 065</a>
+                        <a href="mailto:uctarna@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> uctarna@tank-ono.cz</a>
+                    </div>
+                    <div class="person-card">
+                        <div class="person-name">Jana Rážová</div>
+                        <div class="person-role">Účetní</div>
+                        <a href="tel:+420377382090" class="person-contact"><i class="fa-solid fa-phone"></i> +420 377 382 090</a>
+                    </div>
+                    <div class="person-card">
+                        <div class="person-name">Jana Brejchová</div>
+                        <div class="person-role">Účetní</div>
+                        <a href="tel:+420377382090" class="person-contact"><i class="fa-solid fa-phone"></i> +420 377 382 090</a>
+                        <a href="mailto:ucetni1@tank-ono.cz" class="person-contact"><i class="fa-solid fa-envelope"></i> ucetni1@tank-ono.cz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <div class="section-heading">
+                <i class="fa-solid fa-timeline"></i> Historie rozvoje sítě stanic Tank ONO
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">1993</span>
+                    <div class="timeline-desc">Vznik společnosti Tank ONO s.r.o.</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1994</span>
+                    <div class="timeline-desc">Čerpací stanice Domažlická Plzeň</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1997</span>
+                    <div class="timeline-desc">Čerpací stanice Nýřany</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1999</span>
+                    <div class="timeline-desc">Myčka osobních a nákladních vozidel Nýřany</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2001</span>
+                    <div class="timeline-desc">Čerpací stanice Studentská Plzeň</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2002</span>
+                    <div class="timeline-desc">Čerpací stanice Sokolov</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2003</span>
+                    <div class="timeline-desc">Čerpací stanice Teplice</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2004</span>
+                    <div class="timeline-desc">Čerpací stanice Cheb</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2005</span>
+                    <div class="timeline-desc">Čerpací stanice Milovice u Hořic</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2006</span>
+                    <div class="timeline-desc">Čerpací stanice Chlumec u Ústí nad Labem, Jihlava, Trutnov, Jindřichův Hradec</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2007</span>
+                    <div class="timeline-desc">Čerpací stanice Vysoké Mýto, Havraň u Mostu, Kolaje u Poděbrad, Ústí nad Labem - Božtěšická</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2008</span>
+                    <div class="timeline-desc">Čerpací stanice Praha - Dolní Měcholupy, Kbelnice u Strakonic, Havlovice u Domažlic, Mělník, Krupá u Rakovníka</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2009</span>
+                    <div class="timeline-desc">Čerpací stanice Dolní Dvořiště I a II</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2010</span>
+                    <div class="timeline-desc">Čerpací stanice Církvice, Sukorady, Podolí u Písku a Planá nad Lužnicí</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2011</span>
+                    <div class="timeline-desc">Čerpací stanice Spytihněv, Mošnov</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2012</span>
+                    <div class="timeline-desc">Čerpací stanice Kojetice-Tůmovka, Cvikov, Chomutov - Přečaply</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2013</span>
+                    <div class="timeline-desc">Čerpací stanice Zádveřice u Zlína, Popovice u Brna</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2014</span>
+                    <div class="timeline-desc">Čerpací stanice Roudnice nad Labem, Vysokov u Náchoda</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2016</span>
+                    <div class="timeline-desc">Čerpací stanice Praha - Štěrboholy, Řasnice-Strážný, Břest u Kroměříže, Vojtanov</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2017</span>
+                    <div class="timeline-desc">Čerpací stanice Dobkovice u Děčína, Březno u Loun D7</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2019</span>
+                    <div class="timeline-desc">Čerpací stanice Brno - Hviezdoslavova</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2020</span>
+                    <div class="timeline-desc">Čerpací stanice Studénka – D1 exit 336, Ostrov nad Ohří</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2024</span>
+                    <div class="timeline-desc">Čerpací stanice Chlumčany u Přeštic</div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">2025</span>
+                    <div class="timeline-desc">Čerpací stanice Rumburk</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="brand-logo" style="display:inline-block; margin-bottom: 12px;">ONO</div>
+                    <p>Tank ONO s.r.o.<br>Poctivá česká síť čerpacích stanic od roku 1993.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Rychlé odkazy</h4>
+                    <ul>
+                        <li><a href="index.html#ceny">Aktuální ceník</a></li>
+                        <li><a href="prehled_pump.html">Seznam stanic</a></li>
+                        <li><a href="index.html#sluzby">Služby</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Pro řidiče</h4>
+                    <ul>
+                        <li><a href="#">Kvalita paliv & Certifikace</a></li>
+                        <li><a href="#">Palivové karty</a></li>
+                        <li><a href="#">Bezpečnostní listy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <p>Infolinka: +420 377 421 111<br>Email: info@tank-ono.cz</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tank ONO s.r.o. Všechna práva vyhrazena. | Designed & Developed by Aurea</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
