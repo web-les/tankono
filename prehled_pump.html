@@ -100,6 +100,7 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
         }
 
         .brand {
@@ -164,6 +165,26 @@
         .nav-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
+        }
+
+        /* Tlačítko mobilního menu (ve výchozím stavu skryté) */
+        .menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            font-size: 1.2rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Hero Sekce */
@@ -488,10 +509,81 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+        /* Responsive stylizace pro mobily a malé obrazovky */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
-            .nav-links { display: none; }
             .wizard-card { padding: 20px; }
+
+            /* Zobrazení tlačítka menu na mobilu */
+            .menu-toggle {
+                display: flex;
+            }
+
+            /* Skrytí akčního tlačítka v liště na mobilu, nahrazeno v rozbalovacím menu */
+            .nav-glass .nav-btn {
+                display: none;
+            }
+
+            /* Mobilní verze rozbalovacího menu */
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: calc(100% + 10px);
+                left: 0;
+                width: 100%;
+                background: rgba(14, 20, 32, 0.95);
+                backdrop-filter: blur(28px);
+                -webkit-backdrop-filter: blur(28px);
+                border: 1px solid var(--glass-border);
+                border-radius: 20px;
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            }
+
+            /* Třída pro otevřené menu */
+            .nav-links.open {
+                display: flex;
+                animation: fadeInDown 0.25s ease-out forwards;
+            }
+
+            .nav-links a {
+                font-size: 1.05rem;
+                padding: 8px 12px;
+                border-radius: 10px;
+                display: block;
+            }
+
+            .nav-links a:hover, .nav-links a.active {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            /* Přidané tlačítko do rozbaleného mobilního menu */
+            .nav-links .mobile-nav-btn {
+                display: flex;
+                justify-content: center;
+                background: var(--brand-yellow);
+                color: #000;
+                font-weight: 700;
+                margin-top: 5px;
+            }
+
+            .nav-links .mobile-nav-btn:hover {
+                background: #e6b800;
+                color: #000;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -507,15 +599,21 @@
                     <div class="brand-logo">ONO</div>
                     <div class="brand-title">Tank ONO</div>
                 </a>
-                <ul class="nav-links">
+                
+                <ul class="nav-links" id="navLinks">
                     <li><a href="index.html#ceny">Ceník paliv</a></li>
                     <li><a href="index.html#sluzby">Služby</a></li>
                     <li><a href="prehled_pump.html" class="active">Síť stanic</a></li>
                     <li><a href="o_firme.html">O společnosti</a></li>
                 </ul>
+
                 <a href="prehled_pump.html" class="nav-btn">
                     <i class="fa-solid fa-location-dot"></i> Najít stanici
                 </a>
+
+                <button class="menu-toggle" id="menuToggle" aria-label="Otevřít menu">
+                    <i class="fa-solid fa-bars" id="menuIcon"></i>
+                </button>
             </div>
         </nav>
 
@@ -590,12 +688,37 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Tank ONO s.r.o. Všechna práva vyhrazena. | Designed & Developed by Aurea</p>
+                <p>&copy; 2026 Tank ONO s.r.o. Všechna práva vyhrazena. | Designed & Developed by Aurea</p>
             </div>
         </div>
     </footer>
 
     <script>
+        /* Ovládání mobilního hamburger menu */
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const menuIcon = document.getElementById('menuIcon');
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            if (isOpen) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            } else {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            });
+        });
+
+        /* Data a logika přehledu stanic */
         const stationsData = {
             "Zlínský kraj": [
                 { id: "spytihnev", name: "Spytihněv", address: "Spytihněv 488, 763 64 Spytihněv", phone: "+420 577 941 005", open: "Nonstop (0-24h)", mapUrl: "https://maps.google.com/?q=Tank+ONO+Nyrany6", services: ["Natural 95", "Diesel", "Diesel+", "AdBlue", "Občerstvení", "Kompresor/Vysavač", "Platba EUR"], cards: ["CCS", "DKV", "UTA", "Plat. karty"] },
